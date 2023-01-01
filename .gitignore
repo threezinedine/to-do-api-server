@@ -1,0 +1,19 @@
+# Environment variables
+.env
+venv
+
+# Dependencies
+*.egg-info/
+dist/
+build/
+*.egg
+*.pyc
+__pycache__/
+.python-version
+
+# Test and coverage reports
+.coverage
+.tox/
+
+# database 
+database.db
