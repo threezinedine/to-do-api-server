@@ -16,4 +16,4 @@ __pycache__/
 .tox/
 
 # database 
-database.db
+*.db
