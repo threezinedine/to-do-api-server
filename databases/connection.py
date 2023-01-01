@@ -14,7 +14,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def get_session():
     Base.metadata.create_all(bind=engine)
     try:
-        db = SessionLocal()
-        yield db
+        session = SessionLocal()
+        yield session
     finally:
-        db.close()
+        session.close()
