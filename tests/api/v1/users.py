@@ -61,3 +61,14 @@ class UserTest(unittest.TestCase):
         data = response.json()
         assert set(data.keys()) == self.login_response_keys
         self.assertDictEqual(self.loggin_response_dict, data[UserController.USER_KEY])
+
+    def test_given_a_user_is_created_when_register_a_new_account_with_existed_username_then_returns_HTTP_409_CONFLICT(self):
+        self.user_controller.create_new_user(**self.testing_user)
+
+        response = self.test_client.post(
+                "/users/register",
+                json=self.testing_user
+                )
+
+        assert response.status_code == HTTP_409_CONFLICK
+        assert response.json()["detail"] == "The username existed"
