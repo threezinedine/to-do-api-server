@@ -89,4 +89,4 @@ class UserTest(unittest.TestCase):
         assert response.status_code == 401 
 
         detail = response.json()["detail"]
-        assert detatil == "The username or password is not correct."
+        assert detail == "The username or password is not correct."

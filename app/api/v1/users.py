@@ -47,6 +47,8 @@ def get_all_users(request_user: RequestUser, session: Session = Depends(get_sess
 def login(request_user: RequestUser, session: Session = Depends(get_session)):
     user_controller = UserController(session)
     user = user_controller.get_response_user_by_name(request_user.username)
+    if user is None:
+        raise HTTPException(status_code=401, detail="The username or password is not correct.")
     expired_time_in_minutes = os.getenv(EXPIRED_TIME_IN_MINUTES_KEY, DEFAULT_EXPIRED_TIME)
 
     token = create_token(data={UserController.USER_ID_KEY: user.userId}, 
