@@ -124,10 +124,9 @@ class UserController:
                 Return True if the username exists and the password is correct, vice versa.
         """
         user = self.get_user_by_name(username)
+        is_valid = True
 
-        if user is None:
-            return False
-        elif not user.compared_password(password):
-            return False
+        if user is None or not user.compared_password(password):
+            is_valid = False
 
-        return True
+        return is_valid
