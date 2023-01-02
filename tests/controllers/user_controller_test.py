@@ -33,3 +33,8 @@ class UserControllerTest(unittest.TestCase):
         self.user_controller.create_new_user(username="threezinedine", password="threezinedine")
 
         assert self.user_controller.is_existed(username="threezinedine")
+
+    def test_given_a_user_is_created_when_checking_the_validation_of_the_incoming_valid_user_then_returns_false(self):
+        self.user_controller.create_new_user(username="threezinedine", password="threezinedine")
+
+        assert self.user_controller.is_valid(username="threezinedine", password="threezinedine")

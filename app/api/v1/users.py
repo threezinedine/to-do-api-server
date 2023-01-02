@@ -53,8 +53,7 @@ def login(request_user: RequestUser, session: Session = Depends(get_session)):
     if user is None:
         raise WrongUsernameOrPasswordException
 
-    print(user.compared_password(request_user.username))
-    if not user.compared_password(request_user.username):
+    if not user.compared_password(request_user.password):
         raise WrongUsernameOrPasswordException
 
     expired_time_in_minutes = os.getenv(EXPIRED_TIME_IN_MINUTES_KEY, DEFAULT_EXPIRED_TIME)
