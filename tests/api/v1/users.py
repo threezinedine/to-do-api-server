@@ -33,7 +33,7 @@ class UserTest(unittest.TestCase):
         assert data["userId"] == 1
         assert data["username"] == "threezinedine"
 
-        user = self.user_controller.get_by_name("threezinedine")
+        user = self.user_controller.get_user_by_name("threezinedine")
         assert user.userId == 1
 
     def test_given_a_user_is_created_when_log_in_with_right_value_then_return_the_token(self):
@@ -47,10 +47,10 @@ class UserTest(unittest.TestCase):
         assert response.status_code == 200 
 
         data = response.json()
-        assert set(data.keys()) == set(["userId", "username", "description", "image", "token"])
-        self.assertDictContainsSubset({
+        assert set(data.keys()) == set(["user", "token"])
+        self.assertDictEqual({
             "userId": 1,
             "username": "threezinedine",
             "description": "",
             "image": ""
-            }, data)
+            }, data["user"])

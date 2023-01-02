@@ -27,7 +27,7 @@ def create_token(data: dict, expired_delta: datetime.timedelta) -> str:
         token: string 
             The generated token
     """
-    pass 
+    return jwt.encode(data, secret_key, algorithm=algorithm) 
 
 def get_hased_password(password: str) -> str:
     """
