@@ -17,4 +17,5 @@ def get_testing_session():
     finally:
         session.close()
 
-from .api.v1.users import *
+from tests.api.v1 import *
+from tests.controllers import *
