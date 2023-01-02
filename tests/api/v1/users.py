@@ -35,3 +35,22 @@ class UserTest(unittest.TestCase):
 
         user = self.user_controller.get_by_name("threezinedine")
         assert user.userId == 1
+
+    def test_given_a_user_is_created_when_log_in_with_right_value_then_return_the_token(self):
+        self.user_controller.create_new_user(username="threezinedine", password="threezinedine")
+
+        response = self.test_client.post(
+                "/users/login",
+                json={"username": "threezinedine", "password": "threezinedine"}
+                )
+
+        assert response.status_code == 200 
+
+        data = response.json()
+        assert set(data.keys()) == set(["userId", "username", "description", "image", "token"])
+        self.assertDictContainsSubset({
+            "userId": 1,
+            "username": "threezinedine",
+            "description": "",
+            "image": ""
+            }, data)
