@@ -1,3 +1,4 @@
+import os
 from fastapi import (
     Depends,
 )
@@ -15,10 +16,15 @@ from app.schemas import (
 )
 from app.controllers import UserController
 from app.auth import create_token
+from app.constants import (
+    HTTP_200_OK,
+    DEFAULT_EXPIRED_TIME,
+    EXPIRED_TIME_IN_MINUTES_KEY,
+)
 
 
 @router.post("/register", 
-        status_code=200,
+        status_code=HTTP_200_OK,
         response_model=ResponseUser)
 def get_all_users(request_user: RequestUser, session: Session = Depends(get_session)):
     user_controller = UserController(session)
@@ -28,16 +34,14 @@ def get_all_users(request_user: RequestUser, session: Session = Depends(get_sess
     return user
 
 @router.post("/login",
-        status_code=200,
+        status_code=HTTP_200_OK,
         response_model=ResponseWithToken)
 def login(request_user: RequestUser, session: Session = Depends(get_session)):
     user_controller = UserController(session)
     user = user_controller.get_response_user_by_name(request_user.username)
+    expired_time_in_minutes = os.getenv(EXPIRED_TIME_IN_MINUTES_KEY, DEFAULT_EXPIRED_TIME)
 
-    token = create_token(data={"userId": user.userId}, 
-                            expired_delta=timedelta(minutes=15))
+    token = create_token(data={UserController.USER_ID_KEY: user.userId}, 
+                            expired_delta=timedelta(minutes=expired_time_in_minutes))
 
-    return {
-            "user": user,
-            "token": token
-        }
+    return ResponseWithToken(user=user, token=token)
