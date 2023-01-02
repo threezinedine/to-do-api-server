@@ -1,6 +1,7 @@
 import os
 from fastapi import (
     Depends,
+    HTTPException,
 )
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -31,6 +32,8 @@ def get_all_users(request_user: RequestUser, session: Session = Depends(get_sess
 
     if not user_controller.is_existed(username=request_user.username):
         user_controller.create_new_user(username=request_user.username, password=request_user.password)
+    else:
+        raise HTTPException(status_code=409, detail="The username existed.")
 
     user = user_controller.get_user_by_name(request_user.username)
     return user
