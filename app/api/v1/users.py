@@ -22,6 +22,9 @@ from app.constants import (
     DEFAULT_EXPIRED_TIME,
     EXPIRED_TIME_IN_MINUTES_KEY,
 )
+from app.exceptions import (
+    UserExistedException,
+)
 
 
 @router.post("/register", 
@@ -33,7 +36,7 @@ def get_all_users(request_user: RequestUser, session: Session = Depends(get_sess
     if not user_controller.is_existed(username=request_user.username):
         user_controller.create_new_user(username=request_user.username, password=request_user.password)
     else:
-        raise HTTPException(status_code=409, detail="The username existed.")
+        raise UserExistedException
 
     user = user_controller.get_user_by_name(request_user.username)
     return user
