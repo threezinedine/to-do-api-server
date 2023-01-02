@@ -28,3 +28,8 @@ class UserControllerTest(unittest.TestCase):
         assert user.userId == 1
         assert user.username == "threezinedine"
         assert user.compared_password("threezinedine")
+
+    def test_given_a_valid_user_is_created_when_ask_the_user_existance_then_returns_true(self):
+        self.user_controller.create_new_user(username="threezinedine", password="threezinedine")
+
+        assert self.user_controller.is_existed(username="threezinedine")

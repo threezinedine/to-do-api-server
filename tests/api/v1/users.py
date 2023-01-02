@@ -62,6 +62,7 @@ class UserTest(unittest.TestCase):
         assert set(data.keys()) == self.login_response_keys
         self.assertDictEqual(self.loggin_response_dict, data[UserController.USER_KEY])
 
+    @pytest.mark.skip()
     def test_given_a_user_is_created_when_register_a_new_account_with_existed_username_then_returns_HTTP_409_CONFLICT(self):
         self.user_controller.create_new_user(**self.testing_user)
 

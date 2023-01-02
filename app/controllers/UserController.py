@@ -89,3 +89,20 @@ class UserController:
 
         self.session.add(user)
         self.session.commit()
+
+    def is_existed(self, username: str) -> bool:
+        """
+        The medthod that checks whether username is created
+
+        Paratemers
+        ----------
+            username: str 
+                The checked username.
+
+        Returns
+        -------
+            is_existed: bool 
+                Return True if the username existed, vice versa
+        """
+        user = self.get_user_by_name(username)
+        return user is not None

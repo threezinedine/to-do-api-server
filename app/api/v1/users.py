@@ -28,7 +28,9 @@ from app.constants import (
         response_model=ResponseUser)
 def get_all_users(request_user: RequestUser, session: Session = Depends(get_session)):
     user_controller = UserController(session)
-    user_controller.create_new_user(username=request_user.username, password=request_user.password)
+
+    if not user_controller.is_existed(username=request_user.username):
+        user_controller.create_new_user(username=request_user.username, password=request_user.password)
 
     user = user_controller.get_user_by_name(request_user.username)
     return user
