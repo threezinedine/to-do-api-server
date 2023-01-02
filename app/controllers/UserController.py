@@ -127,5 +127,7 @@ class UserController:
 
         if user is None:
             return False
+        elif not user.compared_password(password):
+            return False
 
         return True
