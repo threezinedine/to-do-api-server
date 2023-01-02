@@ -13,12 +13,15 @@ from app.constants import (
 from app.exceptions import (
     HTTP_409_CONFLICT,
     USER_EXISTED_MESSAGE,
+    HTTP_401_UNAUTHORIZED,
+    WRONG_USERNAME_OR_PASSWORD_MESSAGE,
 )
 
 
 class UserTest(unittest.TestCase):
     testing_user = {UserController.USERNAME_KEY: "threezinedine", UserController.PASSWORD_KEY: "threezinedine"}
-    wrong_testing_user = {UserController.USERNAME_KEY: "threezinedine1", UserController.PASSWORD_KEY: "threezinedine"}
+    wrong_username_testing_user = {UserController.USERNAME_KEY: "threezinedine1", UserController.PASSWORD_KEY: "threezinedine"}
+    wrong_password_testing_user = {UserController.USERNAME_KEY: "threezinedine", UserController.PASSWORD_KEY: "threezinedine1"}
     loggin_response_dict = {
             UserController.USER_ID_KEY: 1,
             UserController.USERNAME_KEY: "threezinedine",
@@ -78,15 +81,29 @@ class UserTest(unittest.TestCase):
         assert set(data.keys()) == self.login_response_keys
         self.assertDictEqual(self.loggin_response_dict, data[UserController.USER_KEY])
 
-    def test_given_a_user_is_created_when_login_with_wrong_username_then_returns_no_user_existed(self):
+    def test_given_a_user_is_created_when_login_with_wrong_username_then_returns_wrong_username_or_password(self):
         self.user_controller.create_new_user(**self.testing_user)
 
         response = self.test_client.post(
                 "/users/login",
-                json=self.wrong_testing_user
+                json=self.wrong_username_testing_user
                 )
 
-        assert response.status_code == 401 
+        assert response.status_code == HTTP_401_UNAUTHORIZED 
 
         detail = response.json()["detail"]
-        assert detail == "The username or password is not correct."
+        assert detail == WRONG_USERNAME_OR_PASSWORD_MESSAGE
+
+    def test_given_a_username_is_created_when_login_with_wrong_password_then_returns_wrong_username_or_password(self):
+        self.user_controller.create_new_user(**self.testing_user)
+
+        response = self.test_client.post(
+                "/users/login",
+                json=self.wrong_password_testing_user
+                )
+
+        assert response.status_code == HTTP_401_UNAUTHORIZED 
+
+        detail = response.json()["detail"]
+        assert detail == WRONG_USERNAME_OR_PASSWORD_MESSAGE
+
