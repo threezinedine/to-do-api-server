@@ -18,6 +18,7 @@ from app.exceptions import (
 
 class UserTest(unittest.TestCase):
     testing_user = {UserController.USERNAME_KEY: "threezinedine", UserController.PASSWORD_KEY: "threezinedine"}
+    wrong_testing_user = {UserController.USERNAME_KEY: "threezinedine1", UserController.PASSWORD_KEY: "threezinedine"}
     loggin_response_dict = {
             UserController.USER_ID_KEY: 1,
             UserController.USERNAME_KEY: "threezinedine",
@@ -77,3 +78,15 @@ class UserTest(unittest.TestCase):
         assert set(data.keys()) == self.login_response_keys
         self.assertDictEqual(self.loggin_response_dict, data[UserController.USER_KEY])
 
+    def test_given_a_user_is_created_when_login_with_wrong_username_then_returns_no_user_existed(self):
+        self.user_controller.create_new_user(**self.testing_user)
+
+        response = self.test_client.post(
+                "/users/login",
+                json=self.wrong_testing_user
+                )
+
+        assert response.status_code == 401 
+
+        detail = response.json()["detail"]
+        assert detatil == "The username or password is not correct."
