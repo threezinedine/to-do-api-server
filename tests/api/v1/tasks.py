@@ -25,7 +25,7 @@ class TaskTest(unittest.TestCase):
                 "taskName": "Implement the API server",
                 "taskDescription": "",
                 "taskType": "project",
-                "plannedDate": datetime.strptime("2023-03-01", "%Y-%m-%d")
+                "plannedDate": "2023-03-01"
             }
 
     def setUp(self):
@@ -53,6 +53,10 @@ class TaskTest(unittest.TestCase):
         self.session.commit()
         self.session.close()
 
+    def assertTaskContains(self, task, compared_task):
+        for key, value in compared_task.items():
+            assert task[key] == value
+
     def test_given_a_user_is_created_when_login_with_right_value_and_request_the_task_then_returns_empty_string(self):
         response = self.test_client.get(
                 "/tasks",
@@ -63,15 +67,14 @@ class TaskTest(unittest.TestCase):
         self.assertListEqual(response.json(), [])
 
     def test_given_a_user_is_created_and_a_task_are_created_when_login_with_right_value_and_request_the_task_then_returns_the_array_contains_that_string(self):
+        self.task_controller.create_new_task_by_username(username=self.test_user["username"], **self.test_task)
         response = self.test_client.get(
                 "/tasks",
                 headers=self.header
             )
 
-        self.task_controller.create_new_task_by_username(username=self.test_user["username"], **self.test_task)
-
         assert response.status_code == 200
 
         first_task = response.json()[0]
-        self.assertDictContainsSubset(dict(taskId=1, taskComplete=False, **self.test_task))
+        self.assertTaskContains(first_task, dict(taskId=1, taskComplete=False, **self.test_task))
         

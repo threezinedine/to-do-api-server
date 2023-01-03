@@ -25,18 +25,18 @@ class Task(Base):
     plannedDate = Column(Date)
     completeTime = Column(DateTime, default=None)
 
-    def __init__(self, userId: int, taskName: str, taskDescription: str, taskType: str, plannedDate: datetime.datetime):
+    def __init__(self, userId: int, taskName: str, taskDescription: str, taskType: str, plannedDate: str):
         self.userId = userId
         self.taskName = taskName
         self.taskDescription = taskDescription
         self.taskType = taskType
         self.taskComplete = False
-        self.plannedDate = plannedDate
+        self.plannedDate = datetime.datetime.strptime(plannedDate, "%Y-%m-%d").date()
 
     def __repr__(self):
         return f"<Task taskId={self.taskId} userId={self.userId} name={self.taskName} complete={self.taskComplete}>"
 
-    def complete_task(self):
+    def complete_task(self) -> None:
         current_time = datetime.datetime.utcnow() 
         self.taskComplete = True 
         self.completeTime = current_time

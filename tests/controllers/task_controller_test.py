@@ -28,7 +28,10 @@ class TaskControllerTest(unittest.TestCase):
 
     def assertTaskContainsDict(self, task:Task, compared_dict: dict) -> bool:
         for key, value in compared_dict.items():
-            assert getattr(task, key) == value
+            if key != "plannedDate":
+                assert getattr(task, key) == value
+            else:
+                assert datetime.strftime(task.plannedDate, "%Y-%m-%d") == value
 
     def test_given_a_user_is_created_when_query_all_tasks_then_returns_empty_array(self):
         tasks = self.task_controller.get_all_tasks_by_username(username="threezinedine")
@@ -40,7 +43,7 @@ class TaskControllerTest(unittest.TestCase):
                 taskName="Implement API server",
                 taskDescription="",
                 taskType="project",
-                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+                plannedDate="2023-01-01"
             )
         self.task_controller.create_new_task_by_username(username="threezinedine", **task)
         
@@ -54,7 +57,7 @@ class TaskControllerTest(unittest.TestCase):
                 taskName="Implement API server",
                 taskDescription="",
                 taskType="project",
-                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+                plannedDate="2023-01-01"
             )
         self.task_controller.create_new_task_by_username(username="threezinedine1", **task)
 
@@ -67,7 +70,7 @@ class TaskControllerTest(unittest.TestCase):
                 taskName="Implement API server",
                 taskDescription="",
                 taskType="project",
-                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+                plannedDate="2023-01-01"
             )
         self.task_controller.create_new_task_by_username(username="threezinedine", **task)
 

@@ -44,6 +44,9 @@ class UserController:
         """
         return self.session.query(User).filter(User.username==username).first()
 
+    def get_user_by_id(self, userId: int) -> Union[User, None]:
+        return self.session.query(User).filter(User.userId==userId).first()
+
     def get_response_user_by_name(self, username: str) -> Union[FullUser, None]:
         """
         The method that gets the user by username then converts it into pydantic model.

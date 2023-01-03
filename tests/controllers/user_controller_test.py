@@ -57,3 +57,10 @@ class UserControllerTest(unittest.TestCase):
         user = self.user_controller.get_user_by_id(userId=1)
         
         assert user is None
+
+    def test_given_a_user_is_created_when_user_controller_gets_by_id_then_return_that_user(self):
+        self.user_controller.create_new_user(username="threezinedine", password="threezinedine")
+
+        user = self.user_controller.get_user_by_id(userId=1)
+        
+        assert user.userId == 1
