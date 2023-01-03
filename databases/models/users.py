@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     String,
 )
+from sqlalchemy.orm import relationship
 
 from databases.base import Base
 from app.auth import get_hased_password, verify_the_password
@@ -15,6 +16,8 @@ class User(Base):
     password = Column(String(length=50))
     description = Column(String(length=200))
     imagePath = Column(String(length=50), default=None)
+
+    tasks = relationship("Task", backref="user")
 
     def __init__(self, username: str, password: str, description: str):
         self.username = username

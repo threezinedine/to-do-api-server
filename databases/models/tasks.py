@@ -6,6 +6,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     Date,
+    ForeignKey,
 )
 import datetime
 
@@ -15,6 +16,7 @@ from databases.base import Base
 class Task(Base):
     __tablename__ = "tasks"
     taskId = Column(Integer, primary_key=True, index=True)
+    userId = Column(Integer, ForeignKey("users.userId"))
     taskName = Column(String(length=30), nullable=False)
     taskDescription = Column(String(length=200))
     taskType = Column(Enum("core", "project", "tool", name="task_type_enum"))

@@ -10,7 +10,10 @@ from databases.models import (
     User,
 )
 from tests import get_testing_session
-from app.controllers import TaskController
+from app.controllers import (
+    TaskController,
+    UserController,
+)
 
 
 class TaskTest(unittest.TestCase):
@@ -29,12 +32,10 @@ class TaskTest(unittest.TestCase):
         app.dependency_overrides[get_session] = get_testing_session
         self.test_client = TestClient(app) 
         self.session = next(get_testing_session())
-        self.task_controller = TaskController(self.session)
+        self.user_controller = UserController(self.session)
+        self.task_controller = TaskController(self.session, self.user_controller)
 
-        self.test_client.post(
-                "users/register",
-                json=self.test_user
-            )
+        self.user_controller.create_new_user(**self.test_user)
 
         login_response = self.test_client.post(
                 "users/login",
