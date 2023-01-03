@@ -1,5 +1,6 @@
 import unittest
 import pytest
+from datetime import datetime
 from fastapi.testclient import TestClient
 
 from main import app
@@ -16,6 +17,12 @@ class TaskTest(unittest.TestCase):
     test_user = {
                 "username": "threezinedine",
                 "password": "threezinedine",
+            }
+    test_task = {
+                "taskName": "Implement the API server",
+                "taskDescription": "",
+                "taskType": "project",
+                "plannedDate": datetime.strptime("2023-03-01", "%Y-%m-%d")
             }
 
     def setUp(self):
@@ -46,7 +53,6 @@ class TaskTest(unittest.TestCase):
         self.session.close()
 
     def test_given_a_user_is_created_when_login_with_right_value_and_request_the_task_then_returns_empty_string(self):
-
         response = self.test_client.get(
                 "/tasks",
                 headers=self.header
@@ -54,3 +60,17 @@ class TaskTest(unittest.TestCase):
 
         assert response.status_code == 200
         self.assertListEqual(response.json(), [])
+
+    def test_given_a_user_is_created_and_a_task_are_created_when_login_with_right_value_and_request_the_task_then_returns_empty_string(self):
+        response = self.test_client.get(
+                "/tasks",
+                headers=self.header
+            )
+
+        self.task_controller.create_new_task_by_username(username=self.test_user["username"], **self.test_task)
+
+        assert response.status_code == 200
+
+        first_task = response.json()[0]
+        self.assertDictContainsSubset(dict(taskId=1, taskComplete=False, **self.test_task))
+        
