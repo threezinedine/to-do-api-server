@@ -48,3 +48,16 @@ class TaskControllerTest(unittest.TestCase):
 
         assert len(tasks) == 1
         self.assertTaskContainsDict(tasks[0], dict(taskComplete=False, **task))
+
+    def test_given_a_user_is_created_when_a_task_is_created_for_a_wrong_user_then_returns_none(self):
+        task = dict(
+                taskName="Implement API server",
+                taskDescription="",
+                taskType="project",
+                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d").date()
+            )
+        self.task_controller.create_new_task_by_username(username="threezinedine1", **task)
+
+        tasks = self.task_controller.get_all_tasks_by_username(username="threezinedine")
+
+        assert tasks is None
