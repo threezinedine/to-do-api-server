@@ -15,7 +15,7 @@ from databases.base import Base
 
 class Task(Base):
     __tablename__ = "tasks"
-    taskId = Column(Integer, primary_key=True, index=True)
+    taskId = Column(Integer, primary_key=True)
     userId = Column(Integer, ForeignKey("users.userId"))
     taskName = Column(String(length=30), nullable=False)
     taskDescription = Column(String(length=200))
@@ -25,7 +25,8 @@ class Task(Base):
     plannedDate = Column(Date)
     completeTime = Column(DateTime, default=None)
 
-    def __init__(self, taskName: str, taskDescription: str, taskType: str, plannedDate: datetime.datetime):
+    def __init__(self, userId: int, taskName: str, taskDescription: str, taskType: str, plannedDate: datetime.datetime):
+        self.userId = userId
         self.taskName = taskName
         self.taskDescription = taskDescription
         self.taskType = taskType
@@ -33,7 +34,7 @@ class Task(Base):
         self.plannedDate = plannedDate
 
     def __repr__(self):
-        return f"<Task id={self.taskId} name={self.taskName} type={self.taskType} complete={self.taskComplete}>"
+        return f"<Task taskId={self.taskId} userId={self.userId} name={self.taskName} complete={self.taskComplete}>"
 
     def complete_task(self):
         current_time = datetime.datetime.utcnow() 

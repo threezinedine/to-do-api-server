@@ -26,6 +26,10 @@ class TaskControllerTest(unittest.TestCase):
         self.session.commit()
         self.session.close()
 
+    def assertTaskContainsDict(self, task:Task, compared_dict: dict) -> bool:
+        for key, value in compared_dict.items():
+            assert getattr(task, key) == value
+
     def test_given_a_user_is_created_when_query_all_tasks_then_returns_empty_array(self):
         tasks = self.task_controller.get_all_tasks_by_username(username="threezinedine")
 
@@ -36,11 +40,11 @@ class TaskControllerTest(unittest.TestCase):
                 taskName="Implement API server",
                 taskDescription="",
                 taskType="project",
-                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d")
+                plannedDate=datetime.strptime("2023-01-01", "%Y-%m-%d").date()
             )
         self.task_controller.create_new_task_by_username(username="threezinedine", **task)
         
         tasks = self.task_controller.get_all_tasks_by_username(username="threezinedine")
 
         assert len(tasks) == 1
-        self.assertDictContainsSubset(dict(taskComplete=False, **task), tasks[0])
+        self.assertTaskContainsDict(tasks[0], dict(taskComplete=False, **task))
