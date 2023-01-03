@@ -49,7 +49,7 @@ class TaskControllerTest(unittest.TestCase):
         assert len(tasks) == 1
         self.assertTaskContainsDict(tasks[0], dict(taskComplete=False, **task))
 
-    def test_given_a_user_is_created_and_a_task_is_created_when_query_with_a_wrong_user_then_returns_none(self):
+    def test_given_a_user_is_created_when_a_task_is_created_with_a_wrong_user_then_the_querying_returns_none(self):
         task = dict(
                 taskName="Implement API server",
                 taskDescription="",
