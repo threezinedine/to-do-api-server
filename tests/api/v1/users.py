@@ -106,4 +106,3 @@ class UserTest(unittest.TestCase):
 
         detail = response.json()["detail"]
         assert detail == WRONG_USERNAME_OR_PASSWORD_MESSAGE
-
