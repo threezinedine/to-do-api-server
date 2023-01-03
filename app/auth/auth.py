@@ -1,13 +1,30 @@
 import jwt
 import datetime
 import os 
-from fastapi import HTTPException
+from fastapi import (
+    HTTPException,
+    Depends,
+)
+from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
 
 secret_key = os.getenv("SECRET_KEY", "secret_key")
 algorithm = os.getenv("ALGORITHM", "HS256")
 encrypted_obj = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = OAuth2PasswordBearer(tokenUrl="/users/login")
+
+
+def get_current_user_from_token(token: str = Depends(security)):
+    claims = None
+
+    try:
+        claims = jwt.decode(token, secret_key, algorithm)
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="The token is expired.")
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+    return claims
 
 
 def create_token(data: dict, expired_delta: datetime.timedelta) -> str:
