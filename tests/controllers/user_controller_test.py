@@ -2,7 +2,10 @@ import unittest
 import pytest
 
 from app.controllers import UserController
-from databases.models import User
+from databases.models import (
+    User,
+    Task
+)
 from tests import get_testing_session
 
 
@@ -13,6 +16,7 @@ class UserControllerTest(unittest.TestCase):
 
     def tearDown(self):
         self.session.query(User).delete()
+        self.session.query(Task).delete()
         self.session.commit()
         self.session.close()
 

@@ -4,7 +4,10 @@ from fastapi.testclient import TestClient
 
 from main import app
 from databases.connection import get_session
-from databases.models import Task
+from databases.models import (
+    Task,
+    User,
+)
 from tests import get_testing_session
 from app.controllers import TaskController
 
@@ -18,6 +21,7 @@ class TaskTest(unittest.TestCase):
 
     def tearDown(self):
         self.session.query(Task).delete()
+        self.session.query(User).delete()
         self.session.commit()
         self.session.close()
 
