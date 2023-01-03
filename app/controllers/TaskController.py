@@ -22,11 +22,12 @@ class TaskController:
                 plannedDate: datetime) -> None:
         user = self.user_controller.get_user_by_name(username)
 
-        task = Task(userId=user.userId, 
-                        taskName=taskName, 
-                        taskDescription=taskDescription, 
-                        taskType=taskType, 
-                        plannedDate=plannedDate)
-        
-        self.session.add(task)
-        self.session.commit()
+        if user is not None:
+            task = Task(userId=user.userId, 
+                            taskName=taskName, 
+                            taskDescription=taskDescription, 
+                            taskType=taskType, 
+                            plannedDate=plannedDate)
+            
+            self.session.add(task)
+            self.session.commit()
