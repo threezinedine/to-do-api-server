@@ -6,7 +6,7 @@ from fastapi import (
 from sqlalchemy.orm import Session
 from datetime import timedelta
 
-from app.api.v1 import router
+from app.api.v1.users import router
 from databases.connection import (
     get_session,
 )

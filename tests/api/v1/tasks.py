@@ -4,7 +4,9 @@ from fastapi.testclient import TestClient
 
 from main import app
 from databases.connection import get_session
+from databases.models import Task
 from tests import get_testing_session
+from app.controllers import TaskController
 
 
 class TaskTest(unittest.TestCase):
@@ -46,3 +48,4 @@ class TaskTest(unittest.TestCase):
             )
 
         assert response.status_code == 200
+        self.assertListEqual(response.json(), [])
